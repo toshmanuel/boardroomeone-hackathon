@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/profile-photo")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -15,7 +17,7 @@ public class PhotoUploadController {
 
     @SneakyThrows
     @PostMapping("/add-image")
-    public String addImage(@RequestParam("file") MultipartFile file) {
+    public Map<?, ?> addImage(@RequestParam("file") MultipartFile file) {
         return imageUploaderService.uploadImage(file);
     }
 

@@ -25,14 +25,14 @@ public class ImageUploaderServiceImpl {
     }
 
 
-    public String uploadImage(MultipartFile imageFile) throws FileNotFoundException {
+    public Map<?, ?> uploadImage(MultipartFile imageFile) throws FileNotFoundException {
         if (imageFile == null) throw new FileNotFoundException("File not found");
-        String imageUrl = null;
+        Map<?, ?> uploadResult = null;
 
         if(!imageFile.isEmpty()){
             try {
                 final String FOLDER_NAME = "boardroomone/";
-                Map<?, ?> uploadResult = configurationService.uploadImage(imageFile,
+                uploadResult = configurationService.uploadImage(imageFile,
                         ObjectUtils.asMap("transformation", new Transformation<>().aspectRatio("1:1")
                                         .gravity("face")
                                         .background("black")
@@ -40,12 +40,12 @@ public class ImageUploaderServiceImpl {
                                 "public_id",
                                 FOLDER_NAME + extractFileName(Objects.requireNonNull(imageFile.getOriginalFilename())))
                 );
-                imageUrl = (String) uploadResult.get("url");
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return imageUrl;
+        return uploadResult;
 
     }
 
