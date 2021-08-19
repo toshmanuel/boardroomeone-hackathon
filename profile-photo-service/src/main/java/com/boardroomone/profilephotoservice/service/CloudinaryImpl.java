@@ -1,5 +1,6 @@
 package com.boardroomone.profilephotoservice.service;
 
+import com.boardroomone.profilephotoservice.config.CloudinaryConfig;
 import com.cloudinary.Cloudinary;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Request;
@@ -16,12 +17,15 @@ import java.util.Map;
 @Service
 public class CloudinaryImpl implements CloudStorageService {
 
-    Cloudinary cloudinary;
+    private Cloudinary cloudinary;
+    private final CloudinaryConfig cloudinaryConfig;
 
     @Autowired
-    public CloudinaryImpl(Cloudinary cloudinary) {
+    public CloudinaryImpl(Cloudinary cloudinary, CloudinaryConfig cloudinaryConfig) {
         this.cloudinary = cloudinary;
+        this.cloudinaryConfig = cloudinaryConfig;
     }
+
 
     @Override
     public Map<?, ?> uploadImage(MultipartFile file, Map<?, ?> imageProperties) throws IOException {
@@ -33,7 +37,7 @@ public class CloudinaryImpl implements CloudStorageService {
 
     public Response removeImageBackground(MultipartFile file) throws IOException{
         return Request.Post("https://api.remove.bg/v1.0/removebg")
-                .addHeader("X-Api-Key", "qZLsEDXMT4Jva2mSyxjHPAZd")
+                .addHeader("X-Api-Key", cloudinaryConfig.getApiSecretKeyRemoveBg())
                 .body(
                         MultipartEntityBuilder.create()
                                 .addBinaryBody("image_file", file.getInputStream())
